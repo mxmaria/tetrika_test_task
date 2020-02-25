@@ -11,10 +11,12 @@ with open("names.txt") as our_data:
     # Читаю файл не учитывая первые и последние кавычки: "
     # Разбиваю по "," имена из файла, чтобы получить список имен
     prepared_list_of_names = our_data.read()[1:-1].split('","')
+    # Отсортирую список имён в лексикографическом порядке
+    sorted_list_of_names = sorted(prepared_list_of_names)
 
     # Пронумерую каждый элемент списка начиная с 1,
     # чтобы умножить в дальнейшем алфавитную сумму каждого имени на его порядковый номер в списке
-    for index, name in enumerate(prepared_list_of_names, start=1):
+    for index, name in enumerate(sorted_list_of_names, start=1):
         # Прибавляю в "переменную-результат" сумму элементов полученного списка из
         # list comprehension, которая умножается на порядковый номер (index) в списке имен.
         # В списке: номер позиции каждой буквы имени в алфавите (ord(letter.lower())-96)
@@ -22,5 +24,5 @@ with open("names.txt") as our_data:
         amount += sum([ord(letter.lower())-96 for letter in list(name)]) * index
 
 print(amount)
-# Результат: 850722484
+# Результат: 871853874
 
