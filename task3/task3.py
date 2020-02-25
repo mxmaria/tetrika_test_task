@@ -122,13 +122,14 @@ if __name__ == '__main__':
         SELECT dt, usr, mark FROM (
                SELECT u.id usr, 
                       date(datetime(l.scheduled_time, '+3 hours')) dt,
-                      SUM(q.tech_quality) / SUM(CASE WHEN q.tech_quality != '' THEN 1 ELSE 0 END) mark
+                      AVG(q.tech_quality) mark
                  FROM lessons AS l
                  JOIN quality q ON q.lesson_id = l.id
                  JOIN participants p ON l.event_id = p.event_id
                  JOIN users u ON u.id = p.user_id
                 WHERE u.role = 'tutor'
                   AND l.subject = 'phys'
+                  AND q.tech_quality != ''
              GROUP BY usr, dt
              ORDER BY dt, mark DESC
        ) WHERE mark IS NOT NULL GROUP BY dt
@@ -139,14 +140,14 @@ if __name__ == '__main__':
 
 # Результат:
 # ______________________________________________________
-# 2020-01-11 8fe03f08-8581-430c-a590-9888ab36deb3 4
+# 2020-01-11 8fe03f08-8581-430c-a590-9888ab36deb3 4.43
 # 2020-01-12 696c838e-c054-4e9f-a51a-50bf5660f364 4.89
-# 2020-01-13 be676776-8366-4c71-8a35-d58014806eb5 5
-# 2020-01-14 c6718d0e-976c-4d6c-b0e0-32c770776567 4
-# 2020-01-15 b37ccae8-fc31-4ad8-8f55-ca855b23fbf6 5
-# 2020-01-16 2fa2ab62-f1b0-4036-872f-bcfd9a8686ff 4
-# 2020-01-17 696c838e-c054-4e9f-a51a-50bf5660f364 4
-# 2020-01-18 603b8641-c6f6-4d89-ac89-88e50d45aa0d 4
-# 2020-01-19 be676776-8366-4c71-8a35-d58014806eb5 4
-# 2020-01-20 43efce48-94b2-4412-857f-223d45969008 4
+# 2020-01-13 be676776-8366-4c71-8a35-d58014806eb5 5.0
+# 2020-01-14 c6718d0e-976c-4d6c-b0e0-32c770776567 4.0
+# 2020-01-15 b37ccae8-fc31-4ad8-8f55-ca855b23fbf6 5.0
+# 2020-01-16 2fa2ab62-f1b0-4036-872f-bcfd9a8686ff 4.0
+# 2020-01-17 696c838e-c054-4e9f-a51a-50bf5660f364 4.5
+# 2020-01-18 43efce48-94b2-4412-857f-223d45969008 4.25
+# 2020-01-19 be676776-8366-4c71-8a35-d58014806eb5 4.5
+# 2020-01-20 43efce48-94b2-4412-857f-223d45969008 4.5
 # ______________________________________________________
